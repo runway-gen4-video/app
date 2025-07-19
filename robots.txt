@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin/
+Disallow: /api/
+Disallow: /*?search=
+Disallow: /*?q=
+Disallow: /*?query=
+Disallow: /search?
+Disallow: /private/
+Disallow: /tmp/
+Disallow: /cache/
+Disallow: /*.json$
+Disallow: /*.xml$
+Disallow: /*.log$
+
+Crawl-delay: 1
+
+Sitemap: https://GEN4-video/sitemap.xml
